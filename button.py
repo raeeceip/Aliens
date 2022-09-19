@@ -1,26 +1,29 @@
-import pygame.font
+import pygame
+
 
 class Button:
-    def __init__(self, ai_game, msg):
-     
+    def __init__(self, ai_game, effect):
+        """Initialising button attributes"""
         self.screen = ai_game.screen
         self.screen_rect = self.screen.get_rect()
 
-        self.width , self.height = 200, 50
-        self.button_color =(0, 255, 0)
-        self.text_color =(255, 255, 255)
-        self.font = pygame.font.SysFont(None, 48)
-        self.rect = pygame.Rect(0, 0, self.width, self.height)
-        self.rect.center = self.screen_rect.center
-        # The button message needs to be prepped only once.
-        self._prep_msg(msg)
-    
-    def _prep_msg(self, msg):
-        self.msg_image = self.font.render(msg, True, self.text_color, self.button_color)
-        self.msg_image_rect = self.msg_image.get_rect()
-        self.msg_image_rect.center = self.rect.center
-        
+        if effect == "play":
+            self.image = pygame.image.load("images/play_button.png")
+        # Sound button - by default it is a mute button image
+        # As the sound is on and mute button is for turning the sound off
+        elif effect == "sound":
+            self.image = pygame.image.load("images/mute_button.png")
+
+        self.rect = self.image.get_rect()
+
+        # Button placement
+        if effect == "play":
+            self.rect.center = self.screen_rect.center
+        elif effect == "sound":
+            self.rect = self.image.get_rect()
+            self.rect.left = self.screen_rect.left + 10
+            self.rect.top = 120
+
     def draw_button(self):
-        # Draw blank button and then draw message.
-        self.screen.fill(self.button_color, self.rect)
-        self.screen.blit(self.msg_image, self.msg_image_rect)
+        """Drawing play button on the screen"""
+        self.screen.blit(self.image, self.rect)
